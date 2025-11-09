@@ -32,7 +32,7 @@ install: venv
 ## Run the certificate request tool
 run: install
 	@echo "🚀 Running Loopia certificate request tool..."
-	$./bin/request_cert.sh
+	./bin/request_cert.sh
 
 ## Clean up build artifacts and venv
 clean:
