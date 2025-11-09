@@ -1,35 +1,41 @@
-# Makefile for Python virtual environment management
+# Makefile for loopia-request-cert
+# Streamlined development and usage automation
 
 VENV := .venv
 PYTHON := python3
 REQS := requirements.txt
 
-.PHONY: all venv install run clean
+.PHONY: help venv install run lint test clean
 
-# Default target
-all: venv
+## Default target
+all: help
 
-# Create virtual environment
+## Show available commands
+help:
+	@echo "\nAvailable targets:"
+	@grep -E '^##' Makefile | sed -e 's/## //'
+
+## Create Python virtual environment
 venv:
-	@echo "Creating virtual environment in $(VENV)..."
+	@echo "📦 Creating virtual environment in $(VENV)..."
 	$(PYTHON) -m venv $(VENV)
-	@echo "✅ Virtual environment created."
-	@echo "Activate it with: source $(VENV)/bin/activate"
+	@echo "✅ Virtual environment ready. Activate it with:"
+	@echo "   source $(VENV)/bin/activate"
 
-# Install dependencies (after venv exists)
+## Install dependencies
 install: venv
-	@echo "Installing dependencies..."
+	@echo "📥 Installing dependencies..."
 	$(VENV)/bin/pip install --upgrade pip
-ifneq ("$(wildcard $(REQS))","")
 	$(VENV)/bin/pip install -r $(REQS)
-endif
 	@echo "✅ Dependencies installed."
 
-# Run your app
-run: venv
-	$(VENV)/bin/python main.py
+## Run the certificate request tool
+run: install
+	@echo "🚀 Running Loopia certificate request tool..."
+	$./bin/request_cert.sh
 
-# Remove virtual environment
+## Clean up build artifacts and venv
 clean:
-	rm -rf $(VENV)
-	@echo "🧹 Removed virtual environment."
+	@echo "🧹 Cleaning up..."
+	rm -rf $(VENV) __pycache__ .pytest_cache *.pyc
+	@echo "✅ Project cleaned."
